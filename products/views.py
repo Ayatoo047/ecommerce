@@ -23,6 +23,26 @@ def getCategory(request, pk):
     context = {'category': category, 'products':products}
     return render(request, 'products/shop.html', context)
 
+def singleProduct(request, pk):
+    product = Product.objects.get(id=pk)
+    # product = Product.objects.get(id=pk)
+    cart = request.user.profile.cart
+    
+    if request.method == 'POST':
+        Cart.objects.create(
+            owner = request.user.profile,
+            product = cart.product.filter(product.name)
+            # total = goods.price
+        )
+    context = {'product': product, 'cart': cart}
+    return render(request, 'products/shop-single.html', context)
+
+def cart(request, pk):
+    product = Product.objects.get(id=pk)
+    
+    context = {'product': product}
+    return render(request, 'products/cart.html', context)
+
 def createProduct(request):
     pass
 
@@ -42,12 +62,6 @@ def updateProduct(request):
     pass
 
 def deleteProduct(request):
-    pass
-
-def a_product(request, pk):
-    product = Product.objects.get(id=pk)
-    
-    context = {'product': product}
     pass
 
 

@@ -1,5 +1,6 @@
 from django.db import models
 import uuid
+from users.models import Profile
 
 # Create your models here.
 class Product(models.Model):
@@ -15,14 +16,14 @@ class Product(models.Model):
     price = models.IntegerField()
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 class ProductType(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 class Category(models.Model):
     # product = models.ForeignKey('Product', null=True, on_delete=models.SET_NULL)
@@ -30,7 +31,7 @@ class Category(models.Model):
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 class Promotion(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -50,4 +51,13 @@ class Review(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     # reveiwer = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+
+class Cart(models.Model):
+    owner = models.OneToOneField(Profile, blank=True, on_delete=models.CASCADE)
+    product = models.ManyToManyField(Product, blank=True)
+    total = models.IntegerField(default=0, null=True, blank=True )
+
+    def __str__(self):
+        return str(self.owner)
     
