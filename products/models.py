@@ -54,10 +54,19 @@ class Review(models.Model):
     
 
 class Cart(models.Model):
-    owner = models.OneToOneField(Profile, blank=True, on_delete=models.CASCADE)
-    product = models.ManyToManyField(Product, blank=True)
+    owner = models.OneToOneField(Profile, blank=True, null=True, on_delete=models.CASCADE)
+    # getproduct = models.ManyToManyField(Product, blank=True)
     total = models.IntegerField(default=0, null=True, blank=True )
 
     def __str__(self):
         return str(self.owner)
+
+class Cartitem(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='items')
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cartitems')
+    quantity = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.product)
+
     

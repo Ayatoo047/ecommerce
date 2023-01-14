@@ -27,15 +27,23 @@ def singleProduct(request, pk):
     product = Product.objects.get(id=pk)
     # product = Product.objects.get(id=pk)
     cart = request.user.profile.cart
+    products = Product.objects.all()
+    # cart = products.
     
     if request.method == 'POST':
+        # owner = request.user.profile,
+        # product = cart.getproduct.add(product.id)
+        # print(owner, product)
         Cart.objects.create(
             owner = request.user.profile,
-            product = cart.product.filter(product.name)
+            getproduct = product.cart.set([product])
             # total = goods.price
         )
-    context = {'product': product, 'cart': cart}
+    context = {'product': product, 'products':products}
     return render(request, 'products/shop-single.html', context)
+
+def addtoCart(request):
+    return render
 
 def cart(request, pk):
     product = Product.objects.get(id=pk)
