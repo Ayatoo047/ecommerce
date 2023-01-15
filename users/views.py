@@ -24,3 +24,6 @@ def loginUser(request):
 
     context = {}
     return render(request, 'users/login-register.html', context)
+
+
+# def logoutuser()

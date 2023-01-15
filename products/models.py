@@ -69,4 +69,8 @@ class Cartitem(models.Model):
     def __str__(self):
         return str(self.product)
 
+    @property
+    def price(self):
+        final_price = self.quantity * self.product.price
+        return final_price
     
