@@ -77,6 +77,9 @@ def checkout(request):
     context = {'cart': cart, 'items': cartitems}
     return render(request, 'products/checkout.html', context)
 
+def thankyou(request):
+    return render(request, 'products/thankyou.html')
+
 def createProduct(request):
     pass
 
