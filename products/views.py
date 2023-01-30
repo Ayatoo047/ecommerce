@@ -4,6 +4,12 @@ import json
 from django.http import JsonResponse
 from .models import * 
 
+def numberofitem(request):
+    cart = Cart.objects.get(owner=request.user.profile)
+    cartitems = list(cart.cartitems.all())
+    numbersof = len(cartitems)
+    return int(numbersof)
+
 def index(request):
     products = Product.objects.all()
     categories = Category.objects.all()
@@ -13,35 +19,27 @@ def index(request):
     for produce in promotion:
         promo = produce.discount * 100
 
-    context = {'products': products, 'random_items': random_items, 'categories': categories, 'promo':promo, 'promotion': promotion}
+    # cartsize = numberofitems(request)
+ 
+    context = {'products': products, 'random_items': random_items, 'categories': categories, 'promo':promo, 'promotion': promotion, 'cart': cart}
     return render(request, 'products/index.html', context)
 
+
+
 def getCategory(request, pk):
-    # product = Product.objects.get(id=pk)
     category = Category.objects.get(id=pk)
-    # product = Product.objects.all()
     products = Product.objects.all()
-    # Product.category_set.all()
-    context = {'category': category, 'products':products}
+    cart = Cart.objects.get(owner=request.user.profile)
+    cartsize = numberofitem(request)
+    context = {'category': category, 'products':products, 'cart': cart}
     return render(request, 'products/shop.html', context)
 
 def singleProduct(request, pk):
     product = Product.objects.get(id=pk)
-    # product = Product.objects.get(id=pk)
-    # cart = request.user.profile.cart
     products = Product.objects.all()
-    # cart = products.
-    
-    # if request.method == 'POST':
-    #     # owner = request.user.profile,
-    #     # product = cart.getproduct.add(product.id)
-    #     # print(owner, product)
-    #     Cart.objects.create(
-    #         owner = request.user.profile,
-    #         getproduct = product.cart.set([product])
-    #         # total = goods.price
-    #     )
-    context = {'product': product, 'products':products}
+    cart = Cart.objects.get(owner=request.user.profile)
+    cartsize = numberofitem(request)
+    context = {'product': product, 'products':products, 'cart': cart}
     return render(request, 'products/shop-single.html', context)
 
 def addtoCart(request):
@@ -57,7 +55,6 @@ def addtoCart(request):
     return JsonResponse('It is clicked', safe=False)
 
 def cart(request):
-
     cart = None
     cartitems = []
 
@@ -65,7 +62,9 @@ def cart(request):
         cart, created = Cart.objects.get_or_create(owner=request.user.profile)
         cartitems = cart.cartitems.all()
     
-    context = {'cart': cart, 'items': cartitems}
+    # numberofitem = cartitems.count()
+    cartsize = numberofitem(request)
+    context = {'cart': cart, 'items': cartitems, }
     return render(request, 'products/cart.html', context)
 
 def checkout(request):

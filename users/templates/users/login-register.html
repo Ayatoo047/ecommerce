@@ -3,7 +3,7 @@
 {% load static %}
 {% block content %}
 
-{% comment %} {% if page == 'login' %} {% endcomment %}
+{% if page == 'login' %}
 
 <form action="{% url 'login' %}" method="POST">
     {% csrf_token %}
@@ -48,33 +48,18 @@
         </form>
         <div class="auth__alternative">
           <p>Don’t have an Account?</p>
-          {% comment %} <a href="{% url 'register' %}">Sign Up</a> {% endcomment %}
+          <a href="{% url 'register' %}">Sign Up</a>
         </div>
       </div>
     </div>
 
 </form>
 
+{% else %}
 
 
 
-
-
-<!-- <form action="" method="POST">
-    {% csrf_token %}
-    <div class="form__field">
-      {{form.as_p}}
-    </div>
-
-
-    <input type="submit" value="Register">
-</form> -->
-
-
-
-
-
-{% comment %} <div class="auth">
+ <div class="auth">
   <div class="card">
     <div class="auth__header text-center">
       <a href="/">
@@ -86,29 +71,73 @@
 
     <form action="" method="POST" class="form auth__form">
 
-      {% csrf_token %}
-      {% for field in form %}
-      <div class="form__field">
-        <label for="formInput#text">{{field.label}}: </label>
-        {{field}}
-      </div>
-      {% endfor %}
+      <form action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
+        <div class="auth">
+          <div class="card">
+            <div class="auth__header text-center">
+              <a href="/">
+                <img src="{% static 'images/icon.svg' %}" alt="icon" />
+              </a>
+              <h3>Account Register</h3>
+              <p>Hello Customer, Welcome!</p>
+            </div>
+    
+            <form action="" class="form auth__form">
+              <!-- Input:Email -->
+              <div class="form__field">
+                <label for="formInput#text">Username: </label>
+                <input
+                  class="input input--text"
+                  id="formInput#text"
+                  type="text"
+                  name="username"
+                  placeholder="Enter your username..."
+                />
+              </div>
+    
+              <!-- Input:Password -->
+              <div class="form__field">
+                <label for="formInput#password">Password: </label>
+                <input
+                  class="input input--password"
+                  id="formInput#passowrd"
+                  type="password"
+                  name="password"
+                  placeholder="••••••••"
+                />
+              </div>
 
-      <div class="auth__actions">
-        <input class="btn btn--sub btn--lg" type="submit" value="Sign  In" />
-      </div>
+              <div class="form__field">
+                <label for="formInput#password">Password: </label>
+                <input
+                  class="input input--password"
+                  id="formInput#passowrd"
+                  type="password"
+                  name="confirmpassword"
+                  placeholder="••••••••"
+                />
+              </div>
+
+              <div class="auth__actions">
+                <input class="btn btn--sub btn--lg" type="submit" value="Register" />
+                <a href="forgetpassword.html">Forget Password?</a>
+              </div>
+            </form>
+          </div>
+        </div>
+    
     </form>
-
     <div class="auth__alternative">
       <p>Already have an Account?</p>
       <a href="{% url 'login' %}">Log In</a>
     </div>
   </div>
-</div> {% endcomment %}
+</div>
 
 
 
-{% comment %} {% endif %} {% endcomment %}
+{% endif %}
 
 
 {% endblock %}

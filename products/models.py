@@ -67,6 +67,11 @@ class Cart(models.Model):
         grandtotal = sum([item.price for item in cartitems])
         return grandtotal
 
+    @property
+    def numberofitem(self):
+        itemsall = self.cartitems.all()
+        numberofitem = len(itemsall)
+        return numberofitem
 
 class Cartitem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='items')
@@ -82,5 +87,16 @@ class Cartitem(models.Model):
         final_price = self.quantity * self.product.price
         return final_price
 
-  
-    
+    @property
+    def numberofitem(self):
+        itemsall = self.cartitems.all()
+        numberofitem = len(itemsall)
+        return numberofitem
+
+    # @property
+    # def number_of_items(self, request):
+    #     cart = Cart.objects.get(owner=request.user.profile)
+    #     cartitems = cart.cartitems.all()
+
+    #     numberof = cartitems.count()
+    #     return numberof
