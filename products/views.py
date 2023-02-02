@@ -68,12 +68,12 @@ def cart(request):
     return render(request, 'products/cart.html', context)
 
 def checkout(request):
-
+    profile = request.user.profile
     if request.user.is_authenticated:
         cart, created = Cart.objects.get_or_create(owner=request.user.profile)
         cartitems = cart.cartitems.all()
     
-    context = {'cart': cart, 'items': cartitems}
+    context = {'cart': cart, 'items': cartitems, 'profile': profile}
     return render(request, 'products/checkout.html', context)
 
 def thankyou(request):
