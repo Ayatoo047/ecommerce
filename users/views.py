@@ -154,6 +154,7 @@ def verifyOtp(request):
         userotp = request.POST['inputotp']
         if userotp == profile.otp:
             # login(request, user)
+            profile.otp.delete()
             return redirect('index')
 
     context = {'profile': profile}
