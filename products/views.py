@@ -106,8 +106,15 @@ def updateType(request):
 def updateCategory(request):
     pass
 
-def updateProduct(request):
-    pass
+def updateProduct(request, pk):
+    product = Product.objects.get(id=pk)
+    form = productCreationForm(instance=product)
+    if request.method == 'POST':
+        form = productCreationForm(request.POST, instance=product)
+        if form.is_valid:
+            product.save()
+    
+    return render()
 
 def deleteProduct(request):
     pass
