@@ -94,6 +94,22 @@ def createProduct(request):
     context = {'shop':shop, 'form':form}
     return render(request, 'products/create.html', context)
 
+def updateProduct(request, pk):
+    product = Product.objects.get(id=pk)
+    form = productCreationForm(instance=product)
+    if request.method == 'POST':
+        form = productCreationForm(request.POST, instance=product)
+        if form.is_valid():
+            product.save()
+            return redirect('index')
+    
+    context = {'product':product, 'form':form}
+    return render(request, 'products/create.html', context)
+
+def deleteProduct(request):
+    pass
+
+
 def createCategory(request):
     pass
 
@@ -105,19 +121,4 @@ def updateType(request):
 
 def updateCategory(request):
     pass
-
-def updateProduct(request, pk):
-    product = Product.objects.get(id=pk)
-    form = productCreationForm(instance=product)
-    if request.method == 'POST':
-        form = productCreationForm(request.POST, instance=product)
-        if form.is_valid:
-            product.save()
-    
-    context = {'product':product, 'form':form}
-    return render(request, 'products/create.html', context)
-
-def deleteProduct(request):
-    pass
-
 
