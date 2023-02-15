@@ -3,6 +3,7 @@ import random
 import json
 from django.http import JsonResponse
 from .models import * 
+from .forms import *
 
 def numberofitem(request):
     cart = Cart.objects.get(owner=request.user.profile)
@@ -80,7 +81,18 @@ def thankyou(request):
     return render(request, 'products/thankyou.html')
 
 def createProduct(request):
-    pass
+    shop = Shop.objects.filter(owner__id=request.user.id).first()
+    form = productCreationForm()
+    if request.method == 'POST':
+        form = productCreationForm(request.POST)
+        if form.is_valid:
+            product = form.save(commit=False)
+            product.shop = shop
+            product.save()
+            return render('index')
+
+    context = {'shop':shop, 'form':form}
+    return render(request, 'products/create.html', context)
 
 def createCategory(request):
     pass

@@ -1,6 +1,6 @@
 from django.db import models
 import uuid
-from users.models import Profile
+from users.models import Profile, Shop
 
 # Create your models here.
 class Product(models.Model):
@@ -9,6 +9,7 @@ class Product(models.Model):
     image = models.ImageField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     in_stock = models.IntegerField(default=0)
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, null=True)
     category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     ptype = models.ForeignKey('ProductType', null=True, on_delete=models.SET_NULL, blank=True)
@@ -28,6 +29,7 @@ class ProductType(models.Model):
 class Category(models.Model):
     # product = models.ForeignKey('Product', null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=True, null=True)
+    image = models.ImageField(null=True, blank=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
     def __str__(self):

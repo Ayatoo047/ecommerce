@@ -134,7 +134,7 @@ def sendEmail(request, otp):
     )
     email.attach_alternative(message, "text/html")
         # email.attach(filename, pdf, 'application/pdf')
-    email.send(fail_silently=True)
+    email.send(fail_silently=False)
     render(request,template_name='users/otp-verification.html')
     print('success', otp)
     # return (request, 'users/otp-verification.html')
@@ -154,7 +154,7 @@ def verifyOtp(request):
         userotp = request.POST['inputotp']
         if userotp == profile.otp:
             # login(request, user)
-            profile.otp.delete()
+            # profile.otp.delete()
             return redirect('index')
 
     context = {'profile': profile}
