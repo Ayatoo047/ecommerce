@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import random
 import json
 from django.http import JsonResponse
@@ -89,7 +89,7 @@ def createProduct(request):
             product = form.save(commit=False)
             product.shop = shop
             product.save()
-            return render('index')
+            return redirect('index')
 
     context = {'shop':shop, 'form':form}
     return render(request, 'products/create.html', context)
@@ -114,7 +114,8 @@ def updateProduct(request, pk):
         if form.is_valid:
             product.save()
     
-    return render()
+    context = {'product':product, 'form':form}
+    return render(request, 'products/create.html', context)
 
 def deleteProduct(request):
     pass
