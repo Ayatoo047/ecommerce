@@ -117,6 +117,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+
 EMAIL_HOST_USER = 'differencereal6@gmail.com'
 EMAIL_HOST_PASSWORD="hsggmwkiztoruimt"
 

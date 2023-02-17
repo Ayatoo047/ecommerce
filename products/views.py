@@ -109,7 +109,6 @@ def updateProduct(request, pk):
 def deleteProduct(request):
     pass
 
-
 def createCategory(request):
     pass
 

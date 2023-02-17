@@ -1,9 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 # from products.models import Cart
-# class Otp(models.Model):
-#     otp = models.CharField(max_length=6, null=True, blank=True)
-#     created = models.DateTimeField(auto_now_add=True)
+
+
+class Otp(models.Model):
+    profile = models.ForeignKey('Profile', null=True, blank=True, on_delete=models.CASCADE, related_name='otp')
+    otp = models.CharField(max_length=6, null=True, blank=True)
+    created = models.DateTimeField(auto_now=True, null=True)
+    # duration = models.DurationField(default=datetime.timedelta(days =-1, seconds = 68400))
+
+    def __str__(self):
+        return str(self.otp)
+
+    
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
@@ -16,8 +27,8 @@ class Profile(models.Model):
     address = models.CharField(max_length=500)
     country = models.CharField(max_length=300, null=True)
     zipcode = models.CharField(max_length=10, null=True)
-    otp = models.CharField(max_length=6, null=True, blank=True)
-    # otp = models.models.ForeignKey(Otp, on_delete=models.CASCADE, null=True, blank=True)
+    # otp = models.CharField(max_length=6, null=True, blank=True)
+    # otp = models.ForeignKey(Otp, on_delete=models.CASCADE, null=True, blank=True)
     # cart = models.OneToOneField(Cart, blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):

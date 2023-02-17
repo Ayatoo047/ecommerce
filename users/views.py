@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 import random
 from .models import *
 from django.conf import settings
+from pytz import timezone
 
 # Create your views here.
 
@@ -79,9 +80,12 @@ def registerUser(request):
         user.is_active = False
         login(request, user)
 
-        Profile.objects.create(
+        profile = Profile.objects.create(
             user = request.user,
-            otp = otp
+        )
+        Otp.objects.create(
+            otp = otp,
+            profile = profile
         )
         # verifyOtp(request, otp=otp)
         sendEmail(request, otp=otp)
@@ -134,7 +138,7 @@ def sendEmail(request, otp):
     )
     email.attach_alternative(message, "text/html")
         # email.attach(filename, pdf, 'application/pdf')
-    email.send(fail_silently=False)
+    email.send(fail_silently=True)
     render(request,template_name='users/otp-verification.html')
     print('success', otp)
     # return (request, 'users/otp-verification.html')
@@ -148,16 +152,29 @@ def sendEmail(request, otp):
     # else:
     #     messages.warning(request, "Sorry, your payment could not be confirmed.")
 def verifyOtp(request):
-    # user = request.user
     profile = request.user.profile
+    otp = Otp.objects.filter(profile__id=profile.id).first()
     if request.method == 'POST':
         userotp = request.POST['inputotp']
-        if userotp == profile.otp:
-            # login(request, user)
-            # profile.otp.delete()
-            return redirect('index')
 
-    context = {'profile': profile}
+        now = timezone('UTC').localize(datetime.datetime.now())
+        created_time = otp.created + datetime.timedelta(hours = 1)
+        if userotp == str(otp):
+            if (now - created_time) >= datetime.timedelta(minutes = 1):
+                print('otp expired, new sent')
+                otp.otp = generateOtp()
+                otp.save()
+                newotp = otp.otp
+                sendEmail(request, otp=str(newotp))
+
+
+            elif (now - created_time) < datetime.timedelta(minutes = 1):
+                otp.otp = '-'
+                otp.save()
+
+                return redirect('index')
+
+    context = {'profile': profile, 'otp':otp}
     return render(request, 'users/otp-verification.html', context)
 
 
