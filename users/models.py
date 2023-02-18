@@ -38,7 +38,7 @@ class Profile(models.Model):
 class Shop(models.Model):
     name = models.CharField(max_length=200)
     owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name='shop')
-    workers = models.ForeignKey(User, on_delete=models.CASCADE, related_name='workers')
+    # workers = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name='workers')
     # first_name = models.CharField(max_length=200)
     # last_name = models.CharField(max_length=200)
     email = models.EmailField(max_length=200)
@@ -55,3 +55,13 @@ class Shop(models.Model):
     def __str__(self):
         return str(self.name)
 
+
+class Worker(models.Model):
+    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+    shop = models.ForeignKey(Shop, null=True, blank=True, on_delete=models.CASCADE, related_name='workers')
+
+
+    def __str__(self):
+        shop_workers = str(self.user) + ' - ' + str(self.shop) 
+        return shop_workers
+    
