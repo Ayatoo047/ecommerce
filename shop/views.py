@@ -18,21 +18,24 @@ def addWorker(request):
 
 
 def createProduct(request):
-    shop = Shop.objects.filter(owner__id=request.user.id).first()
-    worker = Worker.objects.filter(shop=shop).only('user')
+    shop = Shop.objects.filter(id=request.user.worker.shop.id).first()
+    user_is_a_woker = Shop.objects.filter(workers__id=request.user.id).exists()
+    # shop = Shop.objects.filter(workers__id=request.user.id).exists()
+    # workers = Worker.objects.filter(shop=shop).only('user')
     form = productCreationForm()
     if request.method == 'POST':
-        if request.user in worker:
+        if user_is_a_woker: 
             print('validated')
-            # form = productCreationForm(request.POST)
-            # if form.is_valid:
-            #     product = form.save(commit=False)
-            #     product.shop = shop
-            #     product.save()
-            #     return redirect('index')
+            form = productCreationForm(request.POST)
+            if form.is_valid:
+                product = form.save(commit=False)
+                product.shop = shop
+                product.save()
+                return redirect('index')
+
 
     context = {'shop':shop, 'form':form}
-    return render(request, 'products/create.html', context)
+    return render(request, 'shop/create.html', context)
 
 def updateProduct(request, pk):
     product = Product.objects.get(id=pk)
@@ -44,5 +47,5 @@ def updateProduct(request, pk):
             return redirect('index')
     
     context = {'product':product, 'form':form}
-    return render(request, 'products/create.html', context)
+    return render(request, 'shop/create.html', context)
 

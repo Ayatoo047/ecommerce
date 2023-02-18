@@ -62,6 +62,6 @@ class Worker(models.Model):
 
 
     def __str__(self):
-        shop_workers = str(self.user) + ' - ' + str(self.shop) 
+        shop_workers = str(self.user)
         return shop_workers
     
