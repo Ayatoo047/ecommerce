@@ -40,11 +40,17 @@ def createProduct(request):
 def updateProduct(request, pk):
     product = Product.objects.get(id=pk)
     form = productCreationForm(instance=product)
+    # shop = Shop.objects.filter(id=request.user.worker.shop.id).first()
+    user_is_a_woker = Shop.objects.filter(workers__id=request.user.id).exists()
+    # shop = Shop.objects.filter(workers__id=request.user.id).exists()
+    # workers = Worker.objects.filter(shop=shop).only('user')
+    form = productCreationForm()
     if request.method == 'POST':
-        form = productCreationForm(request.POST, instance=product)
-        if form.is_valid():
-            product.save()
-            return redirect('index')
+        if user_is_a_woker: 
+            form = productCreationForm(request.POST, instance=product)
+            if form.is_valid():
+                product.save()
+                return redirect('index')
     
     context = {'product':product, 'form':form}
     return render(request, 'shop/create.html', context)
