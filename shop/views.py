@@ -16,6 +16,16 @@ def addWorker(request):
     context = {'shop': shop}
     return render(request, 'shop/addworker.html', context)
 
+def deleteWorker(request):
+    shop = Shop.objects.filter(owner__id=request.user.id).first()
+    if request.method == 'POST':
+        user_email = request.POST['email']
+        worker = Worker.objects.prefetch_related('user').filter(user__email=user_email).first()
+        if request.user.id == shop.owner.id:
+            worker.delete()
+    context = {'shop': shop}
+    return render(request, 'shop/addworker.html', context)
+
 
 def createProduct(request):
     shop = Shop.objects.filter(id=request.user.worker.shop.id).first()
@@ -40,7 +50,7 @@ def createProduct(request):
 def updateProduct(request, pk):
     product = Product.objects.get(id=pk)
     form = productCreationForm(instance=product)
-    # shop = Shop.objects.filter(id=request.user.worker.shop.id).first()
+    shop = Shop.objects.filter(id=request.user.worker.shop.id).first()
     user_is_a_woker = Shop.objects.filter(workers__id=request.user.id).exists()
     # shop = Shop.objects.filter(workers__id=request.user.id).exists()
     # workers = Worker.objects.filter(shop=shop).only('user')
