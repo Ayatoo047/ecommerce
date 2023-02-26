@@ -29,9 +29,11 @@ def index(request):
 
 def getCategory(request, pk):
     category = Category.objects.get(id=pk)
-    products = Product.objects.all()
+    products = Product.objects.filter(category__id=category.id)
     cart = Cart.objects.get(owner=request.user.profile)
     cartsize = numberofitem(request)
+
+
     context = {'category': category, 'products':products, 'cart': cart}
     return render(request, 'products/shop.html', context)
 

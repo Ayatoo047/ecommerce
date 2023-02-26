@@ -51,7 +51,7 @@ class Review(models.Model):
     # review = models.TextChoices('Up': 'Up vote', 'Down': 'Down Vote')
     description = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
-    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    # id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     # reveiwer = models.ForeignKey(User, on_delete=models.CASCADE)
     
 
@@ -94,7 +94,12 @@ class Cartitem(models.Model):
         itemsall = self.cartitems.all()
         numberofitem = len(itemsall)
         return numberofitem
+    
 
+class Order(models.Model):
+    owner = models.OneToOneField(Profile, blank=True, null=True, on_delete=models.CASCADE) 
+    is_verified = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
     # @property
     # def number_of_items(self, request):
     #     cart = Cart.objects.get(owner=request.user.profile)
@@ -102,3 +107,7 @@ class Cartitem(models.Model):
 
     #     numberof = cartitems.count()
     #     return numberof
+
+class OrderItems(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
+    orderitems = models.F

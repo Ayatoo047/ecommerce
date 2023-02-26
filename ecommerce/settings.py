@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'products.apps.ProductsConfig',
     'shop.apps.ShopConfig',
+    'payment',
     'users.apps.UsersConfig',
     'django_forms_bootstrap',
     "bootstrap4",
@@ -142,3 +143,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images/')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+PAYSTACK_SECRET_KEY = os.getenv('PAYSTACK_SECRET_KEY')
+PAYSTACK_SECRET_KEY = os.getenv('PAYSTACK_PUBLIC_KEY')
