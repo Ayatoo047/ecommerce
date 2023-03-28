@@ -51,6 +51,7 @@
                   <ul>
                     {% if request.user.is_authenticated %}
                     <li><a href="#"><span class="icon icon-person">{{request.user.username}}</span></a></li>
+                    <li><a href="{% url 'logout' %}"><span class="icon icon-person">Logout</span></a></li>
                     {% else %}
                     <li><a href="{% url 'login' %}"><span class="icon icon-person">Login</span></a></li>
                     {% endif %}
@@ -74,8 +75,8 @@
           <div class="container">
             <ul class="site-menu js-clone-nav d-none d-md-block">
               <li class="has-children active">
-                <a href="index.html">Home</a>
-                <ul class="dropdown">
+                <a href="{% url 'index' %}">Home</a>
+                {% comment %} <ul class="dropdown">
                   <li><a href="#">Menu One</a></li>
                   <li><a href="#">Menu Two</a></li>
                   <li><a href="#">Menu Three</a></li>
@@ -87,20 +88,21 @@
                       <li><a href="#">Menu Three</a></li>
                     </ul>
                   </li>
-                </ul>
+                </ul> {% endcomment %}
               </li>
               <li class="has-children">
-                <a href="about.html">About</a>
-                <ul class="dropdown">
+                <a href="{% url 'about' %}">About</a>
+                {% comment %} <ul class="dropdown">
                   <li><a href="#">Menu One</a></li>
                   <li><a href="#">Menu Two</a></li>
                   <li><a href="#">Menu Three</a></li>
-                </ul>
+                </ul> {% endcomment %}
               </li>
-              <li><a href="shop.html">Shop</a></li>
+              <li><a href="#">Shop</a></li>
               <li><a href="#">Catalogue</a></li>
               <li><a href="#">New Arrivals</a></li>
-              <li><a href="contact.html">Contact</a></li>
+              <li><a href="#">Contact</a></li>
+              <li><a href="{% url 'adminpanel' %}">Admin</a></li>
             </ul>
           </div>
         </nav>

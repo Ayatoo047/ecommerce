@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<a href="{% url 'addworker' %}"> Add Worker</a>
+<hr>
+
+<a href="{% url 'removeworker' %}"> Remove Worker</a>
+<hr>
+<a href="{% url 'create' %}">Add Product</a>
+<hr>
+
+{% endblock content %}

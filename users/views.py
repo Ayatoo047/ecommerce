@@ -138,6 +138,14 @@ def verifyOtp(request):
 
 
 def logoutuser(request):
+    logout(request)
+    return redirect('index')
+
+
+def adminpanel(request):
     user = request.user
-    if request.method == 'POST':
-        logout(request, user)
+    if user.is_superuser == False:
+        HttpResponse('You are not allowed')
+
+    context = {'user': user}
+    return render(request, 'admin.html', context)

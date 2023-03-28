@@ -89,6 +89,6 @@ def createType(request):
 def updateType(request):
     pass
 
-def updateCategory(request):
-    pass
+def about(request):
+    return render(request, 'products/about.html')
 
