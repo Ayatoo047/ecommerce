@@ -1,19 +1,16 @@
 from django.db import models
-from django.urls import reverse
 import secrets
 
 from .paystack import PayStack
 # Create your models here.
 
 class Payment(models.Model):
-    
     amount = models.PositiveIntegerField()
     email = models.EmailField()
     ref = models.CharField(max_length=200)
-    
     # order = models.CharField(max_length=200)
-    name = models.CharField(max_length=200)
-    state_ID = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, null=True, blank=True)
+    state_ID = models.CharField(max_length=200, null=True, blank=True)
     verified = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
 

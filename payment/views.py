@@ -1,46 +1,50 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
-from django.urls import reverse
+
 from django.contrib import messages
 from django.conf import settings
-from .models import Payment,StateID
-from users.models import Profile
-from products.models import Cart
 
-from django.core.mail import EmailMessage
+from products.models import Cart
+from .models import Payment
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from io import BytesIO
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-import os
+
+
+
+# def checkout(request):
+#     profile = request.user.profile
+#     if request.user.is_authenticated:
+#         cart, created = Cart.objects.get_or_create(owner=request.user.profile)
+#         cartitems = cart.cartitems.all()
+    
+#     context = {'cart': cart, 'items': cartitems, 'profile': profile}
+#     return render(request, 'payment/checkout.html', context)
+
+
+def thankyou(request):
+    return render(request, 'products/thankyou.html')
 
 def initiate_payment(request: HttpRequest) -> HttpResponse:
     profile = request.user.profile
-    cart = Cart.objects.prefect_related('cartitems').filter(owner__id=request.user.profile.id).first()
-    # name = cart.first_name
+    cart = Cart.objects.select_related('owner').filter(owner__id=request.user.profile.id).first()
+    # cart, created = Cart.objects.get_or_create(owner=request.user.profile)
+    cartitems = cart.cartitems.all()
     if request.method == "POST":
+        print(cart)
         email = request.user.email
         amount = cart.grandtotal
         orderitems = cart.cartitems.all()
-        # state_ID= request.POST.get('state')
-        # if StateID.objects.filter(identity=state_ID).exists():
-        #     state=StateID.objects.get(identity=state_ID)
-        #     name = state.full_name
-        # else:
-        #     messages.error(
-        #         request,
-        #         "please check again state id does not exist",
-        #     )
-        #     return render(request, "connector.html",{'fee':fee_type})
 
         pay = Payment.objects.create(name=profile,email=email,amount=amount,) #fee_type=fee_type,state_ID=state_ID
         # pays = Payment.objects.get(ref=pay.ref)
-        return render(request, 'reciept.html', {'payment': pay, 'paystack_public_key': settings.PAYSTACK_PUBLIC_KEY})
-
-    return render(request, "connector.html",{'fee':fee_type})
+        return render(request, 'payment/reciept1.html', {'payment': pay, 'paystack_public_keY': settings.PAYSTACK_PUBLIC_KEY})
+    context = {'cart': cart, 'items': cartitems, 'profile': profile}
+    return render(request, 'payment/checkout.html', context)
 
 def verify_payment(request, ref: str):
     trxref = request.GET["trxref"]
@@ -108,4 +112,4 @@ def verify_payment(request, ref: str):
   
     else:
         messages.warning(request, "Sorry, your payment could not be confirmed.")
-    return render(request, "connector.html")
+    return render(request,)

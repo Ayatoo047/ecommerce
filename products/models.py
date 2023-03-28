@@ -11,7 +11,7 @@ class Product(models.Model):
     in_stock = models.IntegerField(default=0)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE, null=True)
     category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
-    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    # id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     ptype = models.ForeignKey('ProductType', null=True, on_delete=models.SET_NULL, blank=True)
     # store
     price = models.IntegerField()
@@ -21,7 +21,7 @@ class Product(models.Model):
 
 class ProductType(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
-    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    # id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
     def __str__(self):
         return str(self.name)
@@ -30,7 +30,7 @@ class Category(models.Model):
     # product = models.ForeignKey('Product', null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=True, null=True)
     image = models.ImageField(null=True, blank=True)
-    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    # id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
     def __str__(self):
         return str(self.name)
@@ -40,7 +40,7 @@ class Promotion(models.Model):
     maximum_time = models.TimeField()
     discount = models.FloatField()
     created = models.DateTimeField(auto_now_add=True)
-    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    # id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
     def __str__(self):
         return str(self.product)
@@ -110,4 +110,6 @@ class Order(models.Model):
 
 class OrderItems(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
-    orderitems = models.F
+    orderitems = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
+    quantity = models.PositiveSmallIntegerField()
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)

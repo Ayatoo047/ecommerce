@@ -3,26 +3,28 @@ import random
 import json
 from django.http import JsonResponse
 from .models import * 
-# from ..shop.forms import *
+
 
 def numberofitem(request):
-    cart = Cart.objects.get(owner=request.user.profile)
+    cart, created = Cart.objects.get_or_create(owner=request.user.profile)
     cartitems = list(cart.cartitems.all())
     numbersof = len(cartitems)
     return int(numbersof)
 
 def index(request):
-    products = Product.objects.all()
+    random_items = Product.objects.all().order_by('?')[:6]
     categories = Category.objects.all()
-    random_items = products.order_by('?')[:6]
 
     promotion = Promotion.objects.all()
-    for produce in promotion:
-        promo = produce.discount * 100
-
+    if promotion is None:
+        for produce in promotion:
+            promo = produce.discount
+    
     # cartsize = numberofitems(request)
- 
-    context = {'products': products, 'random_items': random_items, 'categories': categories, 'promo':promo, 'promotion': promotion, 'cart': cart}
+    if promotion:
+        context = {'random_items': random_items, 'categories': categories, 'promo':promo, 'promotion': promotion, 'cart': cart}
+    else:
+        context = {'random_items': random_items, 'categories': categories, 'cart': cart}
     return render(request, 'products/index.html', context)
 
 
@@ -30,7 +32,7 @@ def index(request):
 def getCategory(request, pk):
     category = Category.objects.get(id=pk)
     products = Product.objects.filter(category__id=category.id)
-    cart = Cart.objects.get(owner=request.user.profile)
+    cart, created = Cart.objects.get_or_create(owner=request.user.profile)
     cartsize = numberofitem(request)
 
 
@@ -40,7 +42,7 @@ def getCategory(request, pk):
 def singleProduct(request, pk):
     product = Product.objects.get(id=pk)
     products = Product.objects.all()
-    cart = Cart.objects.get(owner=request.user.profile)
+    cart, created = Cart.objects.get_or_create(owner=request.user.profile)
     cartsize = numberofitem(request)
     context = {'product': product, 'products':products, 'cart': cart}
     return render(request, 'products/shop-single.html', context)
@@ -70,14 +72,6 @@ def cart(request):
     context = {'cart': cart, 'items': cartitems, }
     return render(request, 'products/cart.html', context)
 
-def checkout(request):
-    profile = request.user.profile
-    if request.user.is_authenticated:
-        cart, created = Cart.objects.get_or_create(owner=request.user.profile)
-        cartitems = cart.cartitems.all()
-    
-    context = {'cart': cart, 'items': cartitems, 'profile': profile}
-    return render(request, 'products/checkout.html', context)
 
 def thankyou(request):
     return render(request, 'products/thankyou.html')

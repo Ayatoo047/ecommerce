@@ -4,11 +4,12 @@ from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
-from io import BytesIO
+from django.http import HttpResponse
 import random
 from .models import *
 from django.conf import settings
 from pytz import timezone
+import datetime
 
 # Create your views here.
 
@@ -29,7 +30,7 @@ def loginUser(request):
             user = User.object.get(username=username)
 
         except:
-            print('user doesnt exist')
+            HttpResponse('user doesnt exist')
 
         user = authenticate(username = username, password=password)
 
@@ -74,11 +75,9 @@ def registerUser(request):
             otp = otp,
             profile = profile
         )
-        # verifyOtp(request, otp=otp)
         sendEmail(request, otp=otp)
         return redirect('otpverification')
 
-        # return redirect('index')
     
     return render(request, 'users/login-register.html')
 
@@ -124,6 +123,7 @@ def verifyOtp(request):
                 otp.save()
                 newotp = otp.otp
                 sendEmail(request, otp=str(newotp))
+                return redirect('otpverification')
 
 
             elif (now - created_time) < datetime.timedelta(minutes = 1):

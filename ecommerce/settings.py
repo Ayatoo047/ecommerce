@@ -12,7 +12,12 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 
 from pathlib import Path
-
+# import environ
+from dotenv import load_dotenv
+load_dotenv()  # loads the configs from .env
+# env = environ.Env()
+# reading .env file
+# environ.Env.read_env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,8 +26,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_y(r3v9b20r^b3ii&bdp%1tjtv7vz3e4a_86n6lh(gkog3-&8q'
-
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
+# SECRET_KEY = env("SECRET_KEY")
+# SECRET_KEY = 'django-insecure-_y(r3v9b20r^b3ii&bdp%1tjtv7vz3e4a_86n6lh(gkog3-&8q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -44,6 +50,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'django_forms_bootstrap',
     "bootstrap4",
+    'api',
 
 ]
 
@@ -88,6 +95,18 @@ DATABASES = {
     }
 }
 
+# APPEND_SLASH=False
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'ecommerce',
+#         'USER': 'root',
+#         'PASSWORD': ',
+#         'HOST':'localhost',
+#         'PORT':'3306',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -143,5 +162,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images/')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-PAYSTACK_SECRET_KEY = os.getenv('PAYSTACK_SECRET_KEY')
-PAYSTACK_SECRET_KEY = os.getenv('PAYSTACK_PUBLIC_KEY')
+PAYSTACK_SECRET_KEY = str(os.getenv('PAYSTACK_SECRET_KEY'))
+PAYSTACK_PUBLIC_KEY = str(os.getenv('PAYSTACK_PUBLIC_KEY'))
