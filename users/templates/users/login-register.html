@@ -169,8 +169,8 @@
 
     <form action="" method="POST" class="form auth__form">
 
+      {% csrf_token %}
       <form action="{% url 'login' %}" method="POST">
-        {% csrf_token %}
         <div class="auth">
           <div class="card">
             <div class="auth__header text-center">
