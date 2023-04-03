@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from users.models import *
+from . models import *
 from .forms import *
 from django.http import HttpResponse
 
 
 def addWorker(request):
-    shop = Shop.objects.filter(owner__id=request.user.id).first()
+    shop = Shop.objects.filter(owner__id=request.user.shop.id).first()
     if request.method == 'POST':
         user_email = request.POST['email']
         user = User.objects.select_related('profile').filter(email=user_email).first()
@@ -19,7 +20,7 @@ def addWorker(request):
     return render(request, 'shop/addworker.html', context)
 
 def deleteWorker(request):
-    shop = Shop.objects.filter(owner__id=request.user.id).first()
+    shop = Shop.objects.filter(owner__id=request.user.shop.id).first()
     if request.method == 'POST':
         user_email = request.POST['email']
         worker = Worker.objects.prefetch_related('user').filter(user__email=user_email).first()
@@ -88,3 +89,33 @@ def deleteProduct(request, pk):
             HttpResponse('you are not authorized')
     context = {'product':product}
     return render(request, 'shop/create.html', context)
+
+def authShop(request):
+    unauth_shops = ShopUnauthenticated.objects.filter(authenticated=False)
+
+    context = {'unauth_shop': unauth_shops}
+    return render(request, 'shop/unauthshop.html', context)
+
+def single_unauth_shop(request, pk):
+    shop = ShopUnauthenticated.objects.get(id=pk)
+
+    if request.method == 'POST':
+        newshop = Shop.objects.create(
+            name = shop.name,
+            owner = shop.owner,
+            email = shop.email,
+            address = shop.address,
+            phone = shop.phone,
+            zipcode = shop.zipcode,
+            country = shop.country
+        )
+
+        shop.reviewed = True
+        shop.authenticated = True
+
+        Worker.objects.create(
+            user = shop.owner,
+            shop = newshop
+            )
+    return render(request, 'shop/single_unath.html', {'shop':shop})
+        
