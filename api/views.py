@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
-from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin
+from rest_framework.mixins import CreateModelMixin,UpdateModelMixin, DestroyModelMixin
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import GenericAPIView
+from rest_framework import mixins
 from . serializer import *
 from rest_framework.response import Response
 from products.models import *
@@ -31,5 +33,18 @@ class ProductList(ModelViewSet):
             return super().update(request, *args, **kwargs)
     
 
-class ShopViewSet(ModelViewSet):
-     pass
+class ShopViewSet(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  mixins.UpdateModelMixin,
+                  GenericAPIView):
+    
+    serializer_class = RegisterShop
+    queryset = ShopUnauthenticated.objects.filter(authenticated=False)
+
+    def update(self, request, *args, **kwargs):
+         return super().update(request, *args, **kwargs)
+    
+    def create(self, request, *args, **kwargs): 
+        return super().create(request, *args, **kwargs)
+    
+    

@@ -42,7 +42,7 @@
 
               <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
                 <div class="site-logo">
-                  <a href="index.html" class="js-logo-clone">Shoppers</a>
+                  <a href="{% url 'index' %}" class="js-logo-clone">Shoppers</a>
                 </div>
               </div>
 
@@ -50,12 +50,12 @@
                 <div class="site-top-icons">
                   <ul>
                     {% if request.user.is_authenticated %}
-                    <li><a href="#"><span class="icon icon-person">{{request.user.username}}</span></a></li>
-                    <li><a href="{% url 'logout' %}"><span class="icon icon-person">Logout</span></a></li>
-                    {% else %}
-                    <li><a href="{% url 'login' %}"><span class="icon icon-person">Login</span></a></li>
-                    {% endif %}
                     <li><a href="#"><span class="icon icon-person"></span></a></li>
+                    {% comment %} <li><a href="{% url 'logout' %}"><span class="icon icon-person">Logout</span></a></li> {% endcomment %}
+                    {% else %}
+                    <li><a href="{% url 'login' %}"><span class="icon icon-person"></span></a></li>
+                    {% endif %}
+                    {% comment %} <li><a href="#"><span class="icon icon-person"></span></a></li> {% endcomment %}
                     <li><a href="#"><span class="icon icon-heart-o"></span></a></li>
                     <li>
                       <a href="{% url 'cart' %}" class="site-cart">

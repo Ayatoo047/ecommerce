@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from products.models import *
+from shop.models import *
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -9,4 +10,6 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class RegisterShop(serializers.ModelSerializer):
-    pass
+    class Meta:
+        model = ShopUnauthenticated
+        fields = ['name', 'email', 'phone', 'address', 'country', 'zipcode', 'reviewed', 'otp']

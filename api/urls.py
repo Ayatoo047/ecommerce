@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register('allproducts', views.ProductList)
+# router.register('registershop', views.RegisterShop,)
 router.urls
 
 print(router.urls)

@@ -130,6 +130,9 @@ def verifyOtp(request):
                 otp.otp = '-'
                 otp.save()
 
+
+
+
                 return redirect('index')
 
     context = {'profile': profile, 'otp':otp}

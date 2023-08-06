@@ -32,19 +32,23 @@ def index(request):
 def getCategory(request, pk):
     category = Category.objects.get(id=pk)
     products = Product.objects.filter(category__id=category.id)
-    cart, created = Cart.objects.get_or_create(owner=request.user.profile)
-    cartsize = numberofitem(request)
-
-
-    context = {'category': category, 'products':products, 'cart': cart}
+    if request.user.is_authenticated:
+        cart, created = Cart.objects.get_or_create(owner=request.user.profile)
+        cartsize = numberofitem(request)
+        context = {'category': category, 'products':products, 'cart': cart}
+    else:
+        context = {'category': category, 'products':products}
     return render(request, 'products/shop.html', context)
 
 def singleProduct(request, pk):
     product = Product.objects.get(id=pk)
     products = Product.objects.all()
-    cart, created = Cart.objects.get_or_create(owner=request.user.profile)
-    cartsize = numberofitem(request)
-    context = {'product': product, 'products':products, 'cart': cart}
+    if request.user.is_authenticated:
+        cart, created = Cart.objects.get_or_create(owner=request.user.profile)
+        cartsize = numberofitem(request)
+        context = {'product': product, 'products':products, 'cart': cart}
+    else:
+        context = {'product': product, 'products':products}
     return render(request, 'products/shop-single.html', context)
 
 def addtoCart(request):
@@ -57,6 +61,11 @@ def addtoCart(request):
         cartitem, created = Cartitem.objects.get_or_create(cart=cart, product=product)
         cartitem.quantity += 1
         cartitem.save()
+    elif request.user.is_anonymous:
+        cart, created = Cart.objects.get_or_create()
+        cartitem, created = Cartitem.objects.get_or_create(cart=cart, product=product)
+        cartitem.quantity += 1
+        cartitem.save()
     return JsonResponse('It is clicked', safe=False)
 
 def cart(request):
@@ -66,7 +75,8 @@ def cart(request):
     if request.user.is_authenticated:
         cart, created = Cart.objects.get_or_create(owner=request.user.profile)
         cartitems = cart.cartitems.all()
-    
+    else:
+        return redirect('login')
     # numberofitem = cartitems.count()
     cartsize = numberofitem(request)
     context = {'cart': cart, 'items': cartitems, }
