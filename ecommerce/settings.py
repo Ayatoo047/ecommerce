@@ -32,7 +32,7 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['ayatoo.pythonanywhere.com']
 
 
 # Application definition
@@ -167,7 +167,7 @@ EMAIL_HOST = 'smtp.mail.yahoo.com'
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-MEDIA_URL = 'images/'
+MEDIA_URL = 'static/images/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/')]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images/')

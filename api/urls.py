@@ -7,5 +7,5 @@ router.register('allproducts', views.ProductList)
 # router.register('registershop', views.RegisterShop,)
 router.urls
 
-print(router.urls)
+# print(router.urls)
 urlpatterns = path('', include(router.urls)),
